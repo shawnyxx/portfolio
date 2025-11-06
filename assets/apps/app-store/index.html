@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: #0a0a0f;
+            color: #e4e4e7;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            padding: 24px 32px;
+            background: #121218;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #1f1f28;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0a8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1a1a24;
+            border-radius: 14px;
+            padding: 14px 20px;
+            border: 1px solid #27273a;
+            transition: all 0.2s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-bar .material-symbols-outlined {
+            color: #71717a;
+            font-size: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: #e4e4e7;
+            font-size: 15px;
+        }
+
+        .search-bar input::placeholder {
+            color: #52525b;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 16px 32px;
+            background: #0f0f14;
+            border-bottom: 1px solid #1f1f28;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid #27273a;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #a1a1aa;
+        }
+
+        .tab:hover {
+            background: #1a1a24;
+            border-color: #3f3f52;
+            color: #e4e4e7;
+        }
+
+        .tab.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            background: #0a0a0f;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #27273a;
+            border-radius: 4px;
+        }
+
+        .content::-webkit-scrollbar-thumb:hover {
+            background: #3f3f52;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .app-card {
+            background: #121218;
+            border: 1px solid #1f1f28;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
+        }
+
+        .app-card.status-beta {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, #121218 100%);
+            border-color: rgba(251, 191, 36, 0.2);
+        }
+
+        .app-card.status-alpha {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, #121218 100%);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .app-card.status-new {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, #121218 100%);
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .app-card.status-test {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, #121218 100%);
+            border-color: rgba(168, 85, 247, 0.2);
+        }
+
+        .app-card.status-last {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, #121218 100%);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            background: #16161d;
+            border-color: #27273a;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .app-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .app-card-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #1a1a24 0%, #27273a 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #27273a;
+        }
+
+        .app-card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-card-icon .material-symbols-outlined {
+            font-size: 32px;
+            color: #52525b;
+        }
+
+        .app-card-info {
+            flex: 1;
+        }
+
+        .app-card-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #fafafa;
+        }
+
+        .app-card-author {
+            font-size: 13px;
+            color: #71717a;
+        }
+
+        .app-card-version {
+            font-size: 12px;
+            color: #52525b;
+            margin-left: 6px;
+        }
+
+        .app-card-description {
+            font-size: 14px;
+            color: #a1a1aa;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .app-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            background: #1a1a24;
+            border: 1px solid #27273a;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #71717a;
+            font-weight: 500;
+        }
+
+        .app-card-footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 12px;
+        }
+
+        .status-info-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #1a1a24;
+            border: 1px solid #27273a;
+            color: #71717a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: help;
+            font-size: 20px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .status-info-btn:hover {
+            background: #27273a;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: scale(1.1);
+        }
+
+        .status-tooltip {
+            position: fixed;
+            bottom: 90px;
+            right: 32px;
+            background: #1a1a24;
+            border: 1px solid #27273a;
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .status-info-btn:hover .status-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .status-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            right: 18px;
+            border: 6px solid transparent;
+            border-top-color: #27273a;
+        }
+
+        .tooltip-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e4e4e7;
+            margin-bottom: 12px;
+        }
+
+        .tooltip-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .tooltip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .tooltip-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .tooltip-color.beta {
+            background: #fbbf24;
+        }
+
+        .tooltip-color.alpha {
+            background: #ef4444;
+        }
+
+        .tooltip-color.new {
+            background: #22c55e;
+        }
+
+        .tooltip-color.test {
+            background: #a855f7;
+        }
+
+        .tooltip-color.last {
+            background: #f87171;
+        }
+
+        .tooltip-label {
+            color: #a1a1aa;
+        }
+
+        .status-badge {
+            display: none;
+        }
+
+        .install-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .install-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .install-btn:hover::before {
+            left: 100%;
+        }
+
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .install-btn:active {
+            transform: translateY(0);
+        }
+
+        .install-btn .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        .install-btn.update {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .install-btn.update:hover {
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .install-btn.installed {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+
+        .install-btn.installed:hover {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #52525b;
+        }
+
+        .empty-state .material-symbols-outlined {
+            font-size: 96px;
+            margin-bottom: 24px;
+            opacity: 0.2;
+            color: #27273a;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #71717a;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            font-size: 15px;
+            color: #52525b;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-message {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>App Store</h1>
+            <div class="search-bar">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="search-input" placeholder="Search apps by name, tags, or author...">
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab" data-tab="search">
+                <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 5px;">search</span>
+                Search
+            </div>
+            <div class="tab active" data-tab="featured">
+                <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 5px;">star</span>
+                Featured
+            </div>
+            <div class="tab" data-tab="community">
+                <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 5px;">group</span>
+                Community
+            </div>
+            <div class="tab" data-tab="beta">
+                <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 5px;">science</span>
+                Beta
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Search Tab -->
+            <div class="tab-content" id="search-tab">
+                <div class="apps-grid" id="search-apps-grid">
+                    <!-- Apps will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Featured Tab -->
+            <div class="tab-content active" id="featured-tab">
+                <div class="apps-grid" id="featured-apps-grid">
+                    <!-- Featured user apps from XML files will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Community Tab -->
+            <div class="tab-content" id="community-tab">
+                <div class="loading-message" style="text-align: center; padding: 40px; color: #71717a;">
+                    <span class="material-symbols-outlined" style="font-size: 48px; display: block; margin-bottom: 16px; animation: spin 2s linear infinite;">sync</span>
+                    Loading community apps...
+                </div>
+                <div class="apps-grid" id="community-apps-grid" style="display: none;">
+                    <!-- Community apps from Firestore will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Beta Tab -->
+            <div class="tab-content" id="beta-tab">
+                <div class="apps-grid" id="beta-apps-grid">
+                    <!-- Beta apps from store.json will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-info-btn">
+        ?
+        <div class="status-tooltip">
+            <div class="tooltip-title">Status Legend</div>
+            <div class="tooltip-item">
+                <div class="tooltip-color beta"></div>
+                <div class="tooltip-label">Beta - Testing phase</div>
+            </div>
+            <div class="tooltip-item">
+                <div class="tooltip-color alpha"></div>
+                <div class="tooltip-label">Alpha - Early development</div>
+            </div>
+            <div class="tooltip-item">
+                <div class="tooltip-color new"></div>
+                <div class="tooltip-label">New - Recently added</div>
+            </div>
+            <div class="tooltip-item">
+                <div class="tooltip-color test"></div>
+                <div class="tooltip-label">Test - Experimental</div>
+            </div>
+            <div class="tooltip-item">
+                <div class="tooltip-color last"></div>
+                <div class="tooltip-label">Last Chance - Final update</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import Firestore from '/assets/scripts/FirestoreHandler.js';
+
+        let allApps = [];
+        let betaApps = [];
+        let userApps = [];
+        let communityApps = [];
+        let installedApps = [];
+        let showBetaInSearch = false;
+
+        // Initialize
+        async function init() {
+            await loadApps();
+            loadInstalledApps();
+            loadSettings();
+            renderSearchApps(getSearchApps());
+            renderFeaturedApps();
+            await loadCommunityApps();
+            renderBetaApps();
+            setupEventListeners();
+        }
+
+        // Load settings from localStorage
+        function loadSettings() {
+            try {
+                const settings = localStorage.getItem('webhub-settings');
+                if (settings) {
+                    const settingsObj = JSON.parse(settings);
+                    showBetaInSearch = settingsObj.showBetaInSearch || false;
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                showBetaInSearch = false;
+            }
+        }
+
+        // Get apps for search tab based on settings
+        function getSearchApps() {
+            if (showBetaInSearch) {
+                return [...allApps, ...communityApps];
+            } else {
+                // Return only user apps and community apps, excluding beta apps
+                return [...userApps, ...communityApps];
+            }
+        }
+
+        // Load community apps from Firestore
+        async function loadCommunityApps() {
+            try {
+                const loadingMessage = document.querySelector('#community-tab .loading-message');
+                const grid = document.getElementById('community-apps-grid');
+
+                // Get community apps from Firestore
+                // Path: data/programs_data/shawnyxx/apps
+                const appsDoc = await Firestore({
+                    Method: "get",
+                    CollectionName: "data",
+                    Document: "programs_data",
+                    SubCollection: "shawnyxx"
+                });
+
+                if (appsDoc && appsDoc.apps && appsDoc.apps.community) {
+                    communityApps = appsDoc.apps.community.map(app => {
+                        // Decode Base64 HTML content if it's split
+                        let htmlContent = '';
+                        if (app.htmlContentParts && Array.isArray(app.htmlContentParts)) {
+                            // Assemble split content
+                            const combinedBase64 = app.htmlContentParts.join('');
+                            try {
+                                htmlContent = decodeURIComponent(escape(atob(combinedBase64)));
+                            } catch (error) {
+                                console.error('Error decoding split Base64 content:', error);
+                            }
+                        } else if (app.htmlContent) {
+                            try {
+                                // Decode single Base64 content
+                                htmlContent = decodeURIComponent(escape(atob(app.htmlContent)));
+                            } catch (error) {
+                                console.error('Error decoding Base64 content:', error);
+                                htmlContent = app.htmlContent;
+                            }
+                        }
+
+                        return {
+                            ...app,
+                            htmlContent,
+                            isCommunityApp: true
+                        };
+                    });
+                } else {
+                    communityApps = [];
+                }
+
+                // Hide loading message and show grid
+                if (loadingMessage) {
+                    loadingMessage.style.display = 'none';
+                }
+                grid.style.display = 'grid';
+
+                renderCommunityApps();
+            } catch (error) {
+                console.error('Error loading community apps:', error);
+                communityApps = [];
+                
+                const loadingMessage = document.querySelector('#community-tab .loading-message');
+                if (loadingMessage) {
+                    loadingMessage.innerHTML = `
+                        <span class="material-symbols-outlined" style="font-size: 48px; display: block; margin-bottom: 16px; color: #ef4444;">error</span>
+                        Failed to load community apps. Please try again later.
+                    `;
+                }
+            }
+        }
+
+        // Load apps from apps.json
+        async function loadApps() {
+            try {
+                const response = await fetch('/assets/json/apps.json');
+                const appsData = await response.json();
+                
+                // Get all categories
+                const preinstalledApps = appsData.apps || [];
+                betaApps = appsData.beta || [];
+                
+                // Load user apps from XML files
+                await loadUserApps();
+                
+                // Combine apps for search, excluding App Store itself and other preinstalled apps
+                allApps = [
+                    ...betaApps,
+                    ...userApps
+                ];
+            } catch (error) {
+                console.error('Error loading apps:', error);
+                allApps = [];
+                betaApps = [];
+                userApps = [];
+            }
+        }
+
+        // Load user apps from XML files in featured-apps folder
+        async function loadUserApps() {
+            try {
+                // First, get the list of XML files in the featured-apps folder
+                const folderPath = '/assets/apps/featured-apps/';
+                
+                // Try to fetch a directory listing (this may need server configuration)
+                // For now, we'll use a workaround: try to fetch known files or use a manifest
+                
+                // Since we can't list directory contents directly from the browser,
+                // we'll try to fetch all potential XML files
+                // A better approach would be to have a manifest.json file listing all user apps
+                
+                const manifestResponse = await fetch(folderPath + 'manifest.json');
+                let xmlFiles = [];
+                
+                if (manifestResponse.ok) {
+                    const manifest = await manifestResponse.json();
+                    xmlFiles = manifest.apps || [];
+                } else {
+                    // Fallback: try common file patterns or hardcoded list
+                    // For production, you should maintain a manifest.json
+                    xmlFiles = ['flappy-bird.xml']; // This should be maintained manually for now
+                }
+                
+                // Load each XML file
+                const userAppPromises = xmlFiles.map(async (filename) => {
+                    try {
+                        const xmlResponse = await fetch(folderPath + filename);
+                        if (!xmlResponse.ok) return null;
+                        
+                        const xmlText = await xmlResponse.text();
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                        
+                        // Get HTML content
+                        let htmlContent = xmlDoc.querySelector('htmlContent')?.textContent || '';
+                        
+                        // Check if content is Base64 encoded
+                        const encoding = xmlDoc.querySelector('metadata > encoding')?.textContent;
+                        if (encoding === 'base64' && htmlContent) {
+                            try {
+                                // Decode Base64 content
+                                htmlContent = decodeURIComponent(escape(atob(htmlContent)));
+                            } catch (error) {
+                                console.error('Error decoding Base64 content:', error);
+                                // If decoding fails, keep the original content
+                            }
+                        }
+                        
+                        // Parse XML to app object
+                        const app = {
+                            id: xmlDoc.querySelector('id')?.textContent || '',
+                            name: xmlDoc.querySelector('name')?.textContent || '',
+                            author: xmlDoc.querySelector('author')?.textContent || '',
+                            description: xmlDoc.querySelector('description')?.textContent || '',
+                            version: xmlDoc.querySelector('version')?.textContent || '1.0.0',
+                            icon: xmlDoc.querySelector('icon')?.textContent || '',
+                            htmlContent: htmlContent,
+                            path: '', // Not needed when htmlContent is present
+                            tags: Array.from(xmlDoc.querySelectorAll('tag')).map(tag => tag.textContent),
+                            status: xmlDoc.querySelector('status')?.textContent || ''
+                        };
+                        
+                        return app;
+                    } catch (error) {
+                        console.error(`Error loading ${filename}:`, error);
+                        return null;
+                    }
+                });
+                
+                const loadedApps = await Promise.all(userAppPromises);
+                userApps = loadedApps.filter(app => app !== null);
+            } catch (error) {
+                console.error('Error loading user apps:', error);
+                userApps = [];
+            }
+        }
+
+        // Load installed apps from localStorage
+        function loadInstalledApps() {
+            try {
+                const apps = localStorage.getItem('webhub-created-apps');
+                installedApps = apps ? JSON.parse(apps) : [];
+            } catch (error) {
+                console.error('Error loading installed apps:', error);
+                installedApps = [];
+            }
+        }
+
+        // Check if app is installed
+        function isAppInstalled(appId) {
+            return installedApps.some(app => app.id === appId && app.addedToHome);
+        }
+
+        // Get installed app by ID
+        function getInstalledApp(appId) {
+            return installedApps.find(app => app.id === appId && app.addedToHome);
+        }
+
+        // Compare two version strings
+        function compareVersions(version1, version2) {
+            if (!version1 || !version2) return 0;
+            
+            const v1parts = version1.toString().split('.').map(Number);
+            const v2parts = version2.toString().split('.').map(Number);
+            
+            for (let i = 0; i < Math.max(v1parts.length, v2parts.length); i++) {
+                const v1part = v1parts[i] || 0;
+                const v2part = v2parts[i] || 0;
+                
+                if (v1part > v2part) return 1;
+                if (v1part < v2part) return -1;
+            }
+            
+            return 0;
+        }
+
+        // Check if app has update available
+        function hasUpdateAvailable(app) {
+            const installedApp = getInstalledApp(app.id);
+            if (!installedApp) return false;
+            
+            const comparison = compareVersions(app.version, installedApp.version);
+            return comparison > 0; // Store version is higher
+        }
+
+        // Install app
+        function installApp(app) {
+            if (isAppInstalled(app.id)) {
+                return;
+            }
+
+            // Add to installed apps with a flag to distinguish from user-created apps
+            const newApp = {
+                id: app.id,
+                name: app.name,
+                description: app.description || '',
+                author: app.author || 'Unknown',
+                version: app.version || '1.0.0',
+                icon: app.icon || '',
+                htmlContent: app.htmlContent || '',
+                lightmode: app.lightmode || false,
+                opensource: app.opensource || false,
+                tags: app.tags || [],
+                addedToHome: true,
+                installedFromStore: true,  // Flag to distinguish from App Creator apps
+                isCommunityApp: app.isCommunityApp || false,
+                createdAt: new Date().toISOString()
+            };
+
+            installedApps.push(newApp);
+            localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
+
+            // Show reload prompt
+            alert('App installed successfully! The page will now reload.');
+            
+            // Reload the page to show the installed app
+            window.top.location.reload();
+        }
+
+        // Uninstall app
+        function uninstallApp(app) {
+            // Find and remove the app from installedApps
+            const index = installedApps.findIndex(a => a.id === app.id);
+            if (index !== -1) {
+                installedApps.splice(index, 1);
+                localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
+                
+                // Reload to update UI
+                renderSearchApps(filterApps(document.getElementById('search-input').value));
+                renderExploreApps();
+                renderBetaApps();
+            }
+        }
+
+        // Update app to latest version
+        async function updateApp(app) {
+            const installedApp = getInstalledApp(app.id);
+            if (!installedApp) return;
+
+            if (confirm(`Update "${app.name}" from v${installedApp.version} to v${app.version}?`)) {
+                try {
+                    // If it's an XML app, load the latest version
+                    if (app.path && app.path.endsWith('.xml')) {
+                        const response = await fetch(app.path);
+                        const xmlText = await response.text();
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                        
+                        const updatedApp = parseXMLApp(xmlDoc);
+                        if (updatedApp) {
+                            // Find and update the installed app
+                            const index = installedApps.findIndex(a => a.id === app.id);
+                            if (index !== -1) {
+                                // Preserve installation metadata
+                                updatedApp.addedToHome = true;
+                                updatedApp.installedFromStore = installedApp.installedFromStore;
+                                updatedApp.createdAt = installedApp.createdAt;
+                                updatedApp.updatedAt = new Date().toISOString();
+                                
+                                installedApps[index] = updatedApp;
+                                localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
+                                
+                                alert(`${updatedApp.name} updated to v${updatedApp.version}. The page will now reload.`);
+                                window.top.location.reload();
+                            }
+                        }
+                    } else {
+                        // For non-XML apps, just update the metadata
+                        const index = installedApps.findIndex(a => a.id === app.id);
+                        if (index !== -1) {
+                            installedApps[index] = {
+                                ...app,
+                                addedToHome: true,
+                                installedFromStore: installedApp.installedFromStore,
+                                createdAt: installedApp.createdAt,
+                                updatedAt: new Date().toISOString()
+                            };
+                            localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
+                            
+                            alert(`${app.name} updated to v${app.version}. The page will now reload.`);
+                            window.top.location.reload();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating app:', error);
+                    alert('Failed to update app');
+                }
+            }
+        }
+
+        // Create app card
+        function createAppCard(app) {
+            const card = document.createElement('div');
+            card.className = 'app-card';
+            
+            // Add status class if app has a status
+            if (app.status && app.status.trim() !== '') {
+                const statusClass = app.status.toLowerCase().replace(/\s+/g, '-');
+                card.classList.add(`status-${statusClass}`);
+            }
+
+            const isInstalled = isAppInstalled(app.id);
+            const updateAvailable = hasUpdateAvailable(app);
+            
+            let buttonContent = '';
+            let buttonClass = 'install-btn';
+            
+            if (updateAvailable) {
+                buttonClass = 'install-btn update';
+                buttonContent = `
+                    <span class="material-symbols-outlined">system_update</span>
+                    Update to v${app.version}
+                `;
+            } else if (isInstalled) {
+                buttonClass = 'install-btn installed';
+                buttonContent = `
+                    <span class="material-symbols-outlined">delete</span>
+                    Uninstall
+                `;
+            } else {
+                buttonContent = `
+                    <span class="material-symbols-outlined">download</span>
+                    Install
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="app-card-header">
+                    <div class="app-card-icon">
+                        ${app.icon && app.icon.trim() !== '' 
+                            ? `<img src="${app.icon.trim()}" alt="${app.name}" onerror="this.parentElement.innerHTML='<span class=\\'material-symbols-outlined\\'>apps</span>'">` 
+                            : `<span class="material-symbols-outlined">apps</span>`
+                        }
+                    </div>
+                    <div class="app-card-info">
+                        <div class="app-card-name">
+                            ${app.name}
+                            ${app.version ? `<span class="app-card-version">v${app.version}</span>` : ''}
+                        </div>
+                        <div class="app-card-author">by ${app.author || 'Unknown'}</div>
+                    </div>
+                </div>
+                <div class="app-card-description">${app.description || 'No description available.'}</div>
+                <div class="app-card-tags">
+                    ${(app.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                <div class="app-card-footer">
+                    <button class="${buttonClass}" data-app-id="${app.id}">
+                        ${buttonContent}
+                    </button>
+                </div>
+            `;
+
+            // Add button event listener
+            const installBtn = card.querySelector('.install-btn');
+            if (updateAvailable) {
+                installBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    updateApp(app);
+                });
+            } else if (isInstalled) {
+                installBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    uninstallApp(app);
+                });
+            } else {
+                installBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    installApp(app);
+                });
+            }
+
+            return card;
+        }
+
+        // Filter apps by search query
+        function filterApps(query) {
+            const searchApps = getSearchApps();
+            
+            if (!query || query.trim() === '') {
+                return searchApps;
+            }
+
+            const lowerQuery = query.toLowerCase();
+            return searchApps.filter(app => {
+                const nameMatch = app.name.toLowerCase().includes(lowerQuery);
+                const tagsMatch = (app.tags || []).some(tag => tag.toLowerCase().includes(lowerQuery));
+                const authorMatch = (app.author || '').toLowerCase().includes(lowerQuery);
+                return nameMatch || tagsMatch || authorMatch;
+            });
+        }
+
+        // Render search apps
+        function renderSearchApps(apps) {
+            const grid = document.getElementById('search-apps-grid');
+            grid.innerHTML = '';
+
+            if (apps.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">search_off</span>
+                        <h3>No apps found</h3>
+                        <p>Try a different search term</p>
+                    </div>
+                `;
+                return;
+            }
+
+            apps.forEach(app => {
+                grid.appendChild(createAppCard(app));
+            });
+        }
+
+        // Render explore apps (user submitted apps)
+        function renderFeaturedApps() {
+            const grid = document.getElementById('featured-apps-grid');
+            grid.innerHTML = '';
+
+            if (userApps.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">inbox</span>
+                        <h3>No featured apps available</h3>
+                        <p>Check back later for curated apps</p>
+                    </div>
+                `;
+                return;
+            }
+
+            userApps.forEach(app => {
+                grid.appendChild(createAppCard(app));
+            });
+        }
+
+        // Render community apps
+        function renderCommunityApps() {
+            const grid = document.getElementById('community-apps-grid');
+            grid.innerHTML = '';
+
+            if (communityApps.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">group</span>
+                        <h3>No community apps yet</h3>
+                        <p>Be the first to publish an app to the community!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            communityApps.forEach(app => {
+                grid.appendChild(createAppCard(app));
+            });
+        }
+
+        // Render beta apps
+        function renderBetaApps() {
+            const grid = document.getElementById('beta-apps-grid');
+            grid.innerHTML = '';
+
+            if (betaApps.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-symbols-outlined">science</span>
+                        <h3>No beta apps available</h3>
+                        <p>Check back later for experimental apps</p>
+                    </div>
+                `;
+                return;
+            }
+
+            betaApps.forEach(app => {
+                grid.appendChild(createAppCard(app));
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    document.getElementById(`${tabName}-tab`).classList.add('active');
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                const filteredApps = filterApps(e.target.value);
+                renderSearchApps(filteredApps);
+                
+                // Auto-switch to search tab when typing
+                if (e.target.value.trim() !== '') {
+                    const searchTab = document.querySelector('.tab[data-tab="search"]');
+                    const tabs = document.querySelectorAll('.tab');
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    searchTab.classList.add('active');
+                    document.getElementById('search-tab').classList.add('active');
+                }
+            });
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
