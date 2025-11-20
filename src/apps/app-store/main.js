@@ -14,7 +14,7 @@ async function updateApp(app) {
                 const xmlText = await response.text();
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                
+
                 const updatedApp = parseXMLApp(xmlDoc);
                 if (updatedApp) {
                     updatedApp.path = app.path; // Set the path from the store app
@@ -26,10 +26,10 @@ async function updateApp(app) {
                         updatedApp.installedFromStore = installedApp.installedFromStore;
                         updatedApp.createdAt = installedApp.createdAt;
                         updatedApp.updatedAt = new Date().toISOString();
-                        
+
                         installedApps[index] = updatedApp;
                         localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
-                        
+
                         alert(`${updatedApp.name} updated to v${updatedApp.version}. The page will now reload.`);
                         window.top.location.reload();
                     }
@@ -46,7 +46,7 @@ async function updateApp(app) {
                         updatedAt: new Date().toISOString()
                     };
                     localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
-                    
+
                     alert(`${app.name} updated to v${app.version}. The page will now reload.`);
                     window.top.location.reload();
                 }
@@ -62,7 +62,7 @@ async function updateApp(app) {
 function createAppCard(app) {
     const card = document.createElement('div');
     card.className = 'app-card';
-    
+
     // Add status class if app has a status
     if (app.status && app.status.trim() !== '') {
         const statusClass = app.status.toLowerCase().replace(/\s+/g, '-');
@@ -71,10 +71,10 @@ function createAppCard(app) {
 
     const isInstalled = isAppInstalled(app.id);
     const updateAvailable = hasUpdateAvailable(app);
-    
+
     let buttonContent = '';
     let buttonClass = 'install-btn';
-    
+
     if (updateAvailable) {
         buttonClass = 'install-btn update';
         buttonContent = `
@@ -97,9 +97,9 @@ function createAppCard(app) {
     card.innerHTML = `
         <div class="app-card-header">
             <div class="app-card-icon">
-                ${app.icon && app.icon.trim() !== '' 
-                    ? `<img src="${app.icon.trim()}" alt="${app.name}" onerror="this.parentElement.innerHTML='<span class=\\'material-symbols-outlined\\'>apps</span>'">` 
-                    : '<span class="material-symbols-outlined">apps</span>'}
+                ${app.icon && app.icon.trim() !== ''
+            ? `<img src="${app.icon.trim()}" alt="${app.name}" onerror="this.parentElement.innerHTML='<span class=\\'material-symbols-outlined\\'>apps</span>'">`
+            : '<span class="material-symbols-outlined">apps</span>'}
             </div>
             <div class="app-card-info">
                 <div class="app-card-title">${app.name}</div>
@@ -172,9 +172,9 @@ function showAppDetails(app) {
             <div class="modal-header">
                 <div class="app-header">
                     <div class="app-icon">
-                        ${app.icon && app.icon.trim() !== '' 
-                            ? `<img src="${app.icon.trim()}" alt="${app.name}" onerror="this.parentElement.innerHTML='<span class=\\'material-symbols-outlined\\'>apps</span>'">` 
-                            : '<span class="material-symbols-outlined">apps</span>'}
+                        ${app.icon && app.icon.trim() !== ''
+            ? `<img src="${app.icon.trim()}" alt="${app.name}" onerror="this.parentElement.innerHTML='<span class=\\'material-symbols-outlined\\'>apps</span>'">`
+            : '<span class="material-symbols-outlined">apps</span>'}
                     </div>
                     <div class="app-info">
                         <h2>${app.name}</h2>
@@ -225,13 +225,13 @@ function showAppDetails(app) {
                     ${app.rating ? `<span><span class="material-symbols-outlined">star</span>${app.rating}</span>` : ''}
                 </div>
                 <div class="actions">
-                    ${isAppInstalled(app.id) ? 
-                        (hasUpdateAvailable(app) ? 
-                            `<button class="update-btn" data-app-id="${app.id}"><span class="material-symbols-outlined">system_update</span>Update</button>` :
-                            `<button class="uninstall-btn" data-app-id="${app.id}"><span class="material-symbols-outlined">delete</span>Uninstall</button>`
-                        ) :
-                        `<button class="install-btn" data-app-id="${app.id}"><span class="material-symbols-outlined">download</span>Install</button>`
-                    }
+                    ${isAppInstalled(app.id) ?
+            (hasUpdateAvailable(app) ?
+                `<button class="update-btn" data-app-id="${app.id}"><span class="material-symbols-outlined">system_update</span>Update</button>` :
+                `<button class="uninstall-btn" data-app-id="${app.id}"><span class="material-symbols-outlined">delete</span>Uninstall</button>`
+            ) :
+            `<button class="install-btn" data-app-id="${app.id}"><span class="material-symbols-outlined">download</span>Install</button>`
+        }
                 </div>
             </div>
         </div>
@@ -506,13 +506,13 @@ function setupStarRating(appId) {
     const starRating = document.querySelector(`.star-rating[data-app-id="${appId}"]`);
     const stars = starRating.querySelectorAll('.star');
     const messageElement = document.getElementById(`rating-message-${appId}`);
-    
+
     // Check if user has already rated today
     const ratingKey = `app_rating_${appId}`;
     const lastRatedKey = `app_last_rated_${appId}`;
     const today = new Date().toDateString();
     const lastRated = localStorage.getItem(lastRatedKey);
-    
+
     if (lastRated === today) {
         const savedRating = localStorage.getItem(ratingKey);
         if (savedRating) {
@@ -527,17 +527,17 @@ function setupStarRating(appId) {
             return;
         }
     }
-    
+
     // Setup hover effects
     stars.forEach((star, index) => {
         star.addEventListener('mouseover', () => {
             updateStarsDisplay(stars, index + 1);
         });
-        
+
         star.addEventListener('mouseout', () => {
             updateStarsDisplay(stars, 0);
         });
-        
+
         star.addEventListener('click', async () => {
             const rating = index + 1;
             await submitRating(appId, rating, stars, messageElement);
@@ -561,7 +561,7 @@ async function submitRating(appId, rating, stars, messageElement) {
     try {
         messageElement.textContent = 'Submitting rating...';
         messageElement.className = 'rating-message';
-        
+
         // Save to Firestore
         const result = await Firestore({
             Method: 'get',
@@ -570,11 +570,11 @@ async function submitRating(appId, rating, stars, messageElement) {
             SubCollection: 'shawnyxx',
             SubDocument: 'apps'
         });
-        
+
         if (!result || !result.community) {
             throw new Error('Failed to load apps data');
         }
-        
+
         const appIndex = result.community.findIndex(app => app.id === appId);
         if (appIndex === -1) {
             // App not found - this might happen for newly published apps or data sync issues
@@ -582,25 +582,25 @@ async function submitRating(appId, rating, stars, messageElement) {
             messageElement.className = 'rating-message error';
             return;
         }
-        
+
         const app = result.community[appIndex];
-        
+
         // Initialize ratings array if it doesn't exist
         if (!app.ratings) {
             app.ratings = [];
         }
-        
+
         // Add new rating
         app.ratings.push({
             rating: rating,
             timestamp: new Date().toISOString(),
             userId: 'anonymous' // Could be enhanced with user identification
         });
-        
+
         // Calculate new average rating
         const totalRating = app.ratings.reduce((sum, r) => sum + r.rating, 0);
         app.rating = totalRating / app.ratings.length;
-        
+
         // Save back to Firestore
         await Firestore({
             Method: 'set',
@@ -610,24 +610,24 @@ async function submitRating(appId, rating, stars, messageElement) {
             SubDocument: 'apps',
             Data: result
         });
-        
+
         // Save to localStorage to prevent re-rating
         const ratingKey = `app_rating_${appId}`;
         const lastRatedKey = `app_last_rated_${appId}`;
         localStorage.setItem(ratingKey, rating.toString());
         localStorage.setItem(lastRatedKey, new Date().toDateString());
-        
+
         // Update UI
         updateStarsDisplay(stars, rating);
         messageElement.textContent = `Thank you! You rated this app ${rating} star${rating > 1 ? 's' : ''}`;
         messageElement.className = 'rating-message success';
-        
+
         // Disable further interaction
         stars.forEach(star => {
             star.style.cursor = 'default';
             star.style.pointerEvents = 'none';
         });
-        
+
     } catch (error) {
         console.error('Error submitting rating:', error);
         messageElement.textContent = 'Failed to submit rating. Please try again.';
@@ -648,20 +648,20 @@ async function installApp(app) {
                     SubCollection: 'shawnyxx',
                     SubDocument: 'apps'
                 });
-                
+
                 if (result && result.community) {
                     const appIndex = result.community.findIndex(communityApp => communityApp.id === app.id);
                     if (appIndex !== -1) {
                         const communityApp = result.community[appIndex];
-                        
+
                         // Initialize downloads if it doesn't exist
                         if (!communityApp.downloads) {
                             communityApp.downloads = 0;
                         }
-                        
+
                         // Increment download count
                         communityApp.downloads += 1;
-                        
+
                         // Save back to database
                         await Firestore({
                             Method: 'set',
@@ -685,7 +685,7 @@ async function installApp(app) {
             const xmlText = await response.text();
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-            
+
             const parsedApp = parseXMLApp(xmlDoc);
             if (parsedApp) {
                 parsedApp.path = app.path; // Set the path from the store app
@@ -693,10 +693,10 @@ async function installApp(app) {
                 parsedApp.installedFromStore = true;
                 parsedApp.createdAt = new Date().toISOString();
                 parsedApp.updatedAt = new Date().toISOString();
-                
+
                 installedApps.push(parsedApp);
                 localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
-                
+
                 alert(`${parsedApp.name} installed successfully!`);
                 window.top.location.reload();
             }
@@ -709,10 +709,10 @@ async function installApp(app) {
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
-            
+
             installedApps.push(appToInstall);
             localStorage.setItem('webhub-created-apps', JSON.stringify(installedApps));
-            
+
             alert(`${app.name} installed successfully!`);
             window.top.location.reload();
         }
@@ -745,11 +745,11 @@ function isAppInstalled(appId) {
 function hasUpdateAvailable(app) {
     const installedApp = getInstalledApp(app.id);
     if (!installedApp) return false;
-    
+
     // Simple version comparison (assuming semantic versioning)
     const installedVersion = installedApp.version || '0.0.0';
     const storeVersion = app.version || '0.0.0';
-    
+
     return storeVersion !== installedVersion;
 }
 
@@ -809,9 +809,9 @@ async function loadFeaturedApps() {
             return;
         }
         const manifest = await manifestResponse.json();
-        
+
         featuredApps = [];
-        
+
         // Load each XML app from the manifest
         for (const filename of manifest.apps) {
             try {
@@ -820,7 +820,7 @@ async function loadFeaturedApps() {
                     const xmlText = await xmlResponse.text();
                     const parser = new DOMParser();
                     const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                    
+
                     const appElement = xmlDoc.querySelector('app');
                     if (appElement) {
                         const app = {
@@ -835,7 +835,7 @@ async function loadFeaturedApps() {
                             status: '',
                             opensource: appElement.querySelector('opensource')?.textContent === 'true'
                         };
-                        
+
                         featuredApps.push(app);
                     }
                 } else {
@@ -845,7 +845,7 @@ async function loadFeaturedApps() {
                 console.error('Error loading XML app:', filename, error);
             }
         }
-        
+
         renderFeaturedApps();
     } catch (error) {
         console.error('Error loading featured apps:', error);
@@ -871,7 +871,7 @@ async function loadBetaApps() {
     try {
         const response = await fetch('/assets/json/apps.json');
         const appsData = await response.json();
-        
+
         betaApps = appsData.beta || [];
         renderBetaApps();
     } catch (error) {
@@ -940,7 +940,7 @@ function renderBetaApps() {
 function renderCommunityApps() {
     const grid = document.getElementById('community-apps-grid');
     const loadingMessage = grid.previousElementSibling;
-    
+
     if (userApps.length === 0) {
         loadingMessage.style.display = 'none';
         grid.style.display = 'block';
@@ -1059,14 +1059,14 @@ function switchTab(tabName) {
 // Initialize app
 async function init() {
     loadInstalledApps();
-    
+
     // Load apps from different sources
     await Promise.all([
         loadFeaturedApps(),
         loadUserApps(),
         loadBetaApps()
     ]);
-    
+
     setupSearch();
     setupTabs();
 }

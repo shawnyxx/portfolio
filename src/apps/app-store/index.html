@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App Store</title>
     <link rel="icon" href="/assets/files/icons/icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-<style>
+    <style>
         /* =============================================================================
            GENERIC APP STYLESHEET - Shawnyxx Portfolio
            
@@ -269,6 +270,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -294,20 +296,24 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 0%,
-                rgba(100, 150, 255, 0.03) 25%,
-                rgba(150, 100, 255, 0.03) 50%,
-                rgba(100, 150, 255, 0.03) 75%,
-                transparent 100%
-            );
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(100, 150, 255, 0.03) 25%,
+                    rgba(150, 100, 255, 0.03) 50%,
+                    rgba(100, 150, 255, 0.03) 75%,
+                    transparent 100%);
             animation: shimmer 3s infinite;
             pointer-events: none;
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .hero-title {
@@ -622,11 +628,11 @@
             border-radius: 50%;
         }
 
-        .toggle-switch input:checked + .toggle-slider {
+        .toggle-switch input:checked+.toggle-slider {
             background-color: rgba(100, 150, 255, 0.3);
         }
 
-        .toggle-switch input:checked + .toggle-slider:before {
+        .toggle-switch input:checked+.toggle-slider:before {
             transform: translateX(24px);
             background-color: rgba(100, 150, 255, 0.9);
         }
@@ -859,7 +865,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* ==================== RESPONSIVE ==================== */
@@ -868,43 +876,43 @@
             .sidebar-layout {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 height: auto;
                 border-right: none;
                 border-bottom: 1px solid #222;
             }
-            
+
             .sidebar-nav {
                 max-height: 200px;
             }
-            
+
             .main-content {
                 padding: 20px;
             }
-            
+
             .content-wrapper {
                 padding: 20px 10px;
             }
-            
+
             .hero-title {
                 font-size: 32px;
             }
-            
+
             .section-title {
                 font-size: 24px;
             }
-            
+
             .grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 15px;
             }
-            
+
             h1 {
                 font-size: 24px;
             }
-            
+
             .simple-container {
                 padding: 25px;
             }
@@ -914,11 +922,11 @@
             .hero-title {
                 font-size: 28px;
             }
-            
+
             .grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .btn,
             .icon-btn {
                 width: 100%;
@@ -1407,6 +1415,7 @@
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(360deg);
             }
@@ -1504,6 +1513,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="sidebar-layout">
         <!-- Sidebar -->
@@ -1557,7 +1567,8 @@
                     <p class="section-description">Apps created by our amazing community.</p>
                 </div>
                 <div class="loading-message" style="text-align: center; padding: 40px; color: #71717a;">
-                    <span class="material-symbols-outlined" style="font-size: 48px; display: block; margin-bottom: 16px; animation: spin 2s linear infinite;">sync</span>
+                    <span class="material-symbols-outlined"
+                        style="font-size: 48px; display: block; margin-bottom: 16px; animation: spin 2s linear infinite;">sync</span>
                     Loading community apps...
                 </div>
                 <div class="apps-grid" id="community-apps-grid" style="display: none;">
@@ -1608,6 +1619,26 @@
         </div>
     </div>
 
+    <!-- Redesign Announcement Modal -->
+    <div id="redesign-announcement-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>App Store Redesigned</h2>
+                <button class="modal-close" id="close-redesign-announcement">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>The App Store has been redesigned. There is now a rating feature and download count for the community
+                    apps. The UI is pretty much the same but the style has been redesigned for better user experience.
+                </p>
+                <div class="modal-actions"
+                    style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+                    <button class="btn-secondary" id="redesign-learn-more">Learn More</button>
+                    <button class="btn-primary" id="redesign-ok">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="./main.js"></script>
     <script>
         // Switch between sidebar sections
@@ -1616,18 +1647,19 @@
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
-            
+
             // Add active class to clicked nav item
             event.currentTarget.classList.add('active');
-            
+
             // Hide all sections
             document.querySelectorAll('.content-section').forEach(section => {
                 section.classList.remove('active');
             });
-            
+
             // Show selected section
             document.getElementById(sectionName + '-section').classList.add('active');
         }
     </script>
 </body>
+
 </html>

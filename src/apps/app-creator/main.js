@@ -6,7 +6,7 @@ let monacoEditor;
 let currentApp = null;
 
 // Initialize the app
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeNavigation();
     initializeEditor();
     loadCreatedApps();
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             const section = this.dataset.section;
             switchSection(section);
         });
@@ -66,7 +66,7 @@ function switchSection(sectionName) {
 function initializeEditor() {
     // Load Monaco Editor
     require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
-    require(['vs/editor/editor.main'], function() {
+    require(['vs/editor/editor.main'], function () {
         monacoEditor = monaco.editor.create(document.getElementById('monaco-editor-container'), {
             value: getDefaultHTML(),
             language: 'html',
@@ -224,12 +224,12 @@ function setIconPreview(src) {
 function setupEventListeners() {
     // Create new app
     const createNewAppBtn = document.getElementById('create-new-app');
-    if (createNewAppBtn) createNewAppBtn.addEventListener('click', function() {
+    if (createNewAppBtn) createNewAppBtn.addEventListener('click', function () {
         showNewAppModal();
     });
 
     // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.ctrlKey && e.key === 's') {
             e.preventDefault();
             if (currentApp) saveApp();
@@ -238,16 +238,16 @@ function setupEventListeners() {
 
     // Import XML
     const importXmlBtn = document.getElementById('import-app-xml');
-    if (importXmlBtn) importXmlBtn.addEventListener('click', function() {
+    if (importXmlBtn) importXmlBtn.addEventListener('click', function () {
         document.getElementById('xml-file-input').click();
     });
 
     const xmlFileInput = document.getElementById('xml-file-input');
-    if (xmlFileInput) xmlFileInput.addEventListener('change', function(e) {
+    if (xmlFileInput) xmlFileInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 try {
                     const xmlContent = e.target.result;
                     const parser = new DOMParser();
@@ -265,16 +265,16 @@ function setupEventListeners() {
 
     // Icon upload
     const uploadIconBtn = document.getElementById('upload-icon-btn');
-    if (uploadIconBtn) uploadIconBtn.addEventListener('click', function() {
+    if (uploadIconBtn) uploadIconBtn.addEventListener('click', function () {
         document.getElementById('icon-file-input').click();
     });
 
     const iconFileInput = document.getElementById('icon-file-input');
-    if (iconFileInput) iconFileInput.addEventListener('change', function(e) {
+    if (iconFileInput) iconFileInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 document.getElementById('icon-preview').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">`;
             };
             reader.readAsDataURL(file);
@@ -300,14 +300,14 @@ function setupEventListeners() {
             alert('Please select an app first');
             return;
         }
-        
+
         // Check if app is banned
         const isBanned = await isAppBanned(currentApp.id);
         if (isBanned) {
             alert('This app has been banned and cannot be published. Please contact support if you believe this is an error.');
             return;
         }
-        
+
         // Check if app is already published
         const isPublished = await isAppPublished(currentApp.id);
         if (isPublished) {
@@ -316,7 +316,7 @@ function setupEventListeners() {
             const version = document.getElementById('publish-version').value.trim() || '1.0.0';
             const tags = document.getElementById('publish-tags').value.trim().split(',').map(t => t.trim()).filter(t => t);
             const assets = currentApp.assets || {};
-            
+
             showVersionUpdateModal(currentApp, author, version, tags, assets);
         } else {
             // Show full publish modal for new apps
@@ -326,7 +326,7 @@ function setupEventListeners() {
 
     // Alternative publish button
     const alternativePublishBtn = document.getElementById('alternative-publish-btn');
-    if (alternativePublishBtn) alternativePublishBtn.addEventListener('click', function() {
+    if (alternativePublishBtn) alternativePublishBtn.addEventListener('click', function () {
         showPublishModal();
         setTimeout(() => {
             showCommunityPublishFields();
@@ -343,16 +343,16 @@ function setupEventListeners() {
 
     // Upload asset
     const uploadAssetBtn = document.getElementById('upload-asset-btn');
-    if (uploadAssetBtn) uploadAssetBtn.addEventListener('click', function() {
+    if (uploadAssetBtn) uploadAssetBtn.addEventListener('click', function () {
         document.getElementById('asset-file-input').click();
     });
 
     const assetFileInput = document.getElementById('asset-file-input');
-    if (assetFileInput) assetFileInput.addEventListener('change', function(e) {
+    if (assetFileInput) assetFileInput.addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 const id = 'asset-' + Date.now();
                 if (!currentApp.assets) currentApp.assets = {};
                 currentApp.assets[id] = event.target.result;
@@ -372,7 +372,7 @@ function setupMenuListeners() {
     if (saveMenuBtn) saveMenuBtn.addEventListener('click', saveApp);
 
     const exitMenuBtn = document.getElementById('exit-menu-btn');
-    if (exitMenuBtn) exitMenuBtn.addEventListener('click', function() {
+    if (exitMenuBtn) exitMenuBtn.addEventListener('click', function () {
         hideAppNav();
         switchSection('home');
     });
@@ -471,7 +471,7 @@ function exportApp() {
     const xmlContent = generateXML(currentApp);
     const blob = new Blob([xmlContent], { type: 'application/xml' });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = `${currentApp.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.xml`;
@@ -510,29 +510,29 @@ function setupModalListeners() {
     // New app modal
     const closeNewAppModal = document.getElementById('close-new-app-modal');
     if (closeNewAppModal) closeNewAppModal.addEventListener('click', hideNewAppModal);
-    
+
     const createAppCancel = document.getElementById('create-app-cancel');
     if (createAppCancel) createAppCancel.addEventListener('click', hideNewAppModal);
-    
+
     const createAppConfirm = document.getElementById('create-app-confirm');
     if (createAppConfirm) createAppConfirm.addEventListener('click', createNewApp);
 
     // Publish modal
     const closePublishModal = document.getElementById('close-publish-modal');
     if (closePublishModal) closePublishModal.addEventListener('click', hidePublishModal);
-    
+
     const openMailtoBtn = document.getElementById('open-mailto-btn');
     if (openMailtoBtn) openMailtoBtn.addEventListener('click', openMailto);
-    
+
     const publishCommunityBtn = document.getElementById('publish-community-btn');
     if (publishCommunityBtn) publishCommunityBtn.addEventListener('click', showCommunityPublishFields);
-    
+
     const confirmCommunityPublishBtn = document.getElementById('confirm-community-publish');
     if (confirmCommunityPublishBtn) confirmCommunityPublishBtn.addEventListener('click', () => publishToCommunity(currentApp));
-    
+
     const cancelCommunityPublishBtn = document.getElementById('cancel-community-publish');
     if (cancelCommunityPublishBtn) cancelCommunityPublishBtn.addEventListener('click', hideCommunityPublishFields);
-    
+
     const showManualInstructionsBtn = document.getElementById('show-manual-instructions-btn');
     if (showManualInstructionsBtn) showManualInstructionsBtn.addEventListener('click', () => {
         // Placeholder for manual instructions
@@ -546,7 +546,7 @@ function setupModalListeners() {
     // Welcome modal
     const closeWelcomeModal = document.getElementById('close-welcome-modal');
     if (closeWelcomeModal) closeWelcomeModal.addEventListener('click', hideWelcomeModal);
-    
+
     const welcomeContinue = document.getElementById('welcome-continue');
     if (welcomeContinue) welcomeContinue.addEventListener('click', hideWelcomeModal);
 
@@ -727,10 +727,10 @@ window.submitBanReviewForApp = submitBanReviewForApp;
 
 function openMailto() {
     if (!currentApp) return;
-    
+
     const subject = `App Submission: ${currentApp.name}`;
     const body = `Hi Shawnyxx,%0A%0AI would like to submit my app for publishing on your portfolio.%0A%0AApp Name: ${currentApp.name}%0ADescription: ${currentApp.description || 'N/A'}%0AOpen Source: ${currentApp.opensource ? 'Yes' : 'No'}%0A%0APlease find the attached XML file.%0A%0ABest regards,%0A[Your Name]`;
-    
+
     window.open(`mailto:shawnyxx@ecxogames.ca?subject=${encodeURIComponent(subject)}&body=${body}`);
     hidePublishModal();
 }
@@ -802,12 +802,12 @@ async function isAppPublished(appId) {
 async function isAppBanned(appId) {
     try {
         const currentData = await FirestoreHandler({ Method: 'get', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps' }) || { community: [], removed: [] };
-        
+
         // If app is in community, it's not banned
         if (currentData.community?.some(a => a.id === appId)) {
             return false;
         }
-        
+
         // Otherwise, check if it's in removed with isBanned: true
         return currentData.removed?.some(a => a.id === appId && a.isBanned) || false;
     } catch (error) {
@@ -885,27 +885,27 @@ async function performPublish(app, author, version, tags, assets) {
 
         // Get current apps data
         const currentData = await FirestoreHandler({ Method: 'get', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps' }) || { community: [] };
-        
+
         console.log('Current data:', currentData);
-        
+
         // Add new app to community array
         currentData.community = currentData.community || [];
         currentData.community.push(appData);
-        
+
         console.log('Updated data:', currentData);
-        
+
         // Save back
         const result = await FirestoreHandler({ Method: 'set', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps', Data: currentData });
-        
+
         console.log('Save result:', result);
-        
+
         alert('App published to community successfully!');
         hidePublishModal();
         hideCommunityPublishFields();
-        
+
         // Store author for published apps filtering
         localStorage.setItem('appCreatorAuthor', author);
-        
+
         // Update publish button and ban notification badge
         updatePublishButton(true, false);
         updateBanNotificationBadge();
@@ -1073,7 +1073,7 @@ function isVersionHigher(newVersion, currentVersion) {
 async function performUpdate(app, author, version, tags, assets) {
     try {
         const currentData = await FirestoreHandler({ Method: 'get', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps' }) || { community: [] };
-        
+
         const appIndex = currentData.community?.findIndex(a => a.id === app.id);
         if (appIndex !== -1) {
             currentData.community[appIndex] = {
@@ -1093,7 +1093,7 @@ async function performUpdate(app, author, version, tags, assets) {
             };
 
             await FirestoreHandler({ Method: 'set', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps', Data: currentData });
-            
+
             alert('App updated successfully!');
             hidePublishModal();
             hideCommunityPublishFields();
@@ -1108,11 +1108,11 @@ async function performUpdate(app, author, version, tags, assets) {
 async function performDelete(appId) {
     try {
         const currentData = await FirestoreHandler({ Method: 'get', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps' }) || { community: [] };
-        
+
         currentData.community = currentData.community?.filter(a => a.id !== appId) || [];
-        
+
         await FirestoreHandler({ Method: 'set', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps', Data: currentData });
-        
+
         alert('App deleted from store successfully!');
         hidePublishModal();
         hideCommunityPublishFields();
@@ -1213,7 +1213,7 @@ function loadCreatedApps() {
             <div class="app-card-title">${app.name}</div>
             <div class="app-card-description">${app.description || 'No description'}</div>
         `;
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function () {
             loadAppForEditing(app);
             switchSection('properties');
         });
@@ -1350,11 +1350,11 @@ async function loadPublishedApps() {
         const result = await FirestoreHandler({ Method: 'get', CollectionName: 'data', Document: 'programs_data', SubCollection: 'shawnyxx', SubDocument: 'apps' });
         const appsData = result || { community: [] };
         const communityApps = appsData.community || [];
-        
+
         // Get user's created apps to find their IDs
         const userApps = JSON.parse(localStorage.getItem('createdApps') || '[]');
         const userAppIds = userApps.map(app => app.id);
-        
+
         const publishedApps = communityApps.filter(app => userAppIds.includes(app.id));
 
         renderPublishedApps(publishedApps);
@@ -1497,12 +1497,12 @@ function loadAssets() {
 }
 
 // Asset management functions
-window.viewAsset = function(id) {
+window.viewAsset = function (id) {
     const data = currentApp.assets[id];
     if (data) window.open(data);
 };
 
-window.deleteAsset = function(id) {
+window.deleteAsset = function (id) {
     if (confirm('Delete this asset?')) {
         delete currentApp.assets[id];
         saveApp();
@@ -1510,11 +1510,11 @@ window.deleteAsset = function(id) {
     }
 };
 
-window.replaceAsset = function(id, input) {
+window.replaceAsset = function (id, input) {
     const file = input.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             currentApp.assets[id] = e.target.result;
             saveApp();
             loadAssets();

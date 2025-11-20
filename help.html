@@ -59,7 +59,8 @@
             flex-direction: column;
             height: 100vh;
             flex-shrink: 0;
-            overflow-y: auto; /* allow sidebar to scroll when content overflows */
+            overflow-y: auto;
+            /* allow sidebar to scroll when content overflows */
         }
 
         .sidebar-header {
@@ -75,7 +76,8 @@
         }
 
         .sidebar-category {
-            padding: 8px 20px; /* smaller padding to reduce gaps between categories */
+            padding: 8px 20px;
+            /* smaller padding to reduce gaps between categories */
             color: #666;
             font-size: 12px;
             text-transform: uppercase;
@@ -83,9 +85,11 @@
         }
 
         .sidebar-nav {
-            flex: none; /* let navs take natural height so categories group at the top */
+            flex: none;
+            /* let navs take natural height so categories group at the top */
             overflow-y: visible;
-            padding: 0; /* remove spacing between category and its nav */
+            padding: 0;
+            /* remove spacing between category and its nav */
         }
 
         .sidebar-nav::-webkit-scrollbar {
@@ -367,7 +371,7 @@
             border: 1px solid #232323;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -383,8 +387,8 @@
 
         .type-icon {
             font-size: 28px;
-            color: rgba(100,150,255,0.95);
-            background: rgba(255,255,255,0.02);
+            color: rgba(100, 150, 255, 0.95);
+            background: rgba(255, 255, 255, 0.02);
             padding: 8px;
             border-radius: 8px;
             display: inline-flex;
@@ -394,18 +398,25 @@
 
         .badge {
             margin-left: auto;
-            background: rgba(100,150,255,0.12);
-            color: rgba(100,150,255,0.95);
+            background: rgba(100, 150, 255, 0.12);
+            color: rgba(100, 150, 255, 0.95);
             padding: 4px 8px;
             border-radius: 999px;
             font-size: 12px;
         }
 
-        .type-card p { color: #cfcfcf; margin: 0; }
+        .type-card p {
+            color: #cfcfcf;
+            margin: 0;
+        }
 
-        .type-card ul { margin-top: 8px; }
+        .type-card ul {
+            margin-top: 8px;
+        }
 
-        .muted { color: #9aa; }
+        .muted {
+            color: #9aa;
+        }
 
 
         .section {
@@ -554,11 +565,15 @@
 
                         <div class="quick-actions" style="display:flex; gap:10px; flex-wrap:wrap;">
                             <a href="#publishing-section" onclick="switchSection('publishing', this)" class="nav-link"
-                                style="background:rgba(100,150,255,0.12); color:rgba(100,150,255,0.95); padding:8px 12px; border-radius:6px; text-decoration:none;">Publish an App</a>
-                            <a href="#documentation-section" onclick="switchSection('documentation', this)" class="nav-link"
-                                style="background:rgba(255,255,255,0.03); color:#ddd; padding:8px 12px; border-radius:6px; text-decoration:none;">Read Docs</a>
+                                style="background:rgba(100,150,255,0.12); color:rgba(100,150,255,0.95); padding:8px 12px; border-radius:6px; text-decoration:none;">Publish
+                                an App</a>
+                            <a href="#documentation-section" onclick="switchSection('documentation', this)"
+                                class="nav-link"
+                                style="background:rgba(255,255,255,0.03); color:#ddd; padding:8px 12px; border-radius:6px; text-decoration:none;">Read
+                                Docs</a>
                             <a href="#types-section" onclick="switchSection('types', this)" class="nav-link"
-                                style="background:rgba(100,255,150,0.06); color:rgba(100,255,150,0.95); padding:8px 12px; border-radius:6px; text-decoration:none;">App Types</a>
+                                style="background:rgba(100,255,150,0.06); color:rgba(100,255,150,0.95); padding:8px 12px; border-radius:6px; text-decoration:none;">App
+                                Types</a>
                         </div>
                     </div>
 
@@ -581,7 +596,8 @@
                             <div class="card-description">Common areas developers ask about</div>
                         </div>
                     </div>
-                    <div class="card-body" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;">
+                    <div class="card-body"
+                        style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;">
                         <div style="background:rgba(255,255,255,0.02); padding:12px; border-radius:6px;">
                             <strong>Styling</strong>
                             <p class="muted" style="margin:6px 0 0 0; font-size:13px;">Use the Generic Styling to keep
@@ -648,7 +664,8 @@
                     <h3>2.1 File Size Limits</h3>
                     <div class="alert alert-info">
                         <p><strong>ℹ️ Size Limit:</strong> Your app's HTML content must be less than
-                            <code>2500 characters</code> or <code>1MB when encoded as Base64</code>.</p>
+                            <code>2500 characters</code> or <code>1MB when encoded as Base64</code>.
+                        </p>
                     </div>
                     <ul>
                         <li>Optimize your code to stay within the size limit</li>
@@ -732,7 +749,8 @@
                         <li><strong>Generic Styling:</strong> How to use and extend the platform's shared styles.</li>
                         <li><strong>External APIs & CDNs:</strong> Use remote services and CDN-hosted libraries to
                             reduce bundle sizes.</li>
-                        <li><strong>Size Optimization:</strong> Practical tips to keep your app within platform limits.</li>
+                        <li><strong>Size Optimization:</strong> Practical tips to keep your app within platform limits.
+                        </li>
                         <li><strong>Resources & Help:</strong> Where to find documentation, examples and tools.</li>
                     </ul>
 
@@ -771,7 +789,8 @@
             <!-- Documentation - External APIs & CDNs -->
             <div class="content-section" id="documentation-apis-section">
                 <div class="section-header">
-                    <h2 class="section-title"><span class="material-symbols-outlined">cloud</span> External APIs &amp; CDNs</h2>
+                    <h2 class="section-title"><span class="material-symbols-outlined">cloud</span> External APIs &amp;
+                        CDNs</h2>
                     <p class="section-description">Guidance for using remote services and CDN libraries safely and
                         efficiently.</p>
                 </div>
@@ -798,7 +817,8 @@
             <!-- Documentation - Size Optimization -->
             <div class="content-section" id="documentation-size-section">
                 <div class="section-header">
-                    <h2 class="section-title"><span class="material-symbols-outlined">compress</span> Size Optimization</h2>
+                    <h2 class="section-title"><span class="material-symbols-outlined">compress</span> Size Optimization
+                    </h2>
                     <p class="section-description">Concrete techniques to reduce final app size.</p>
                 </div>
                 <section class="section">
@@ -815,7 +835,8 @@
             <!-- Documentation - Resources & Help -->
             <div class="content-section" id="documentation-resources-section">
                 <div class="section-header">
-                    <h2 class="section-title"><span class="material-symbols-outlined">help</span> Resources &amp; Help</h2>
+                    <h2 class="section-title"><span class="material-symbols-outlined">help</span> Resources &amp; Help
+                    </h2>
                     <p class="section-description">Where to look for answers, examples and tools.</p>
                 </div>
                 <section class="section">
@@ -845,7 +866,8 @@
                             <span class="material-symbols-outlined type-icon">public</span>
                             <div>
                                 <div style="font-weight:600">Community</div>
-                                <div class="muted" style="font-size:13px">Instant publishing — your app appears in the community feed</div>
+                                <div class="muted" style="font-size:13px">Instant publishing — your app appears in the
+                                    community feed</div>
                             </div>
                             <span class="badge">Instant</span>
                         </div>
@@ -860,8 +882,10 @@
                         </ul>
 
                         <div style="margin-top:auto; display:flex; gap:8px;">
-                            <a class="nav-link" href="#" style="color:rgba(100,150,255,0.95); text-decoration:none;">How to publish</a>
-                            <a class="nav-link" href="#" style="color:#9aa; text-decoration:none;">Community guidelines</a>
+                            <a class="nav-link" href="#" style="color:rgba(100,150,255,0.95); text-decoration:none;">How
+                                to publish</a>
+                            <a class="nav-link" href="#" style="color:#9aa; text-decoration:none;">Community
+                                guidelines</a>
                         </div>
                     </div>
 
@@ -872,7 +896,8 @@
                                 <div style="font-weight:600">Featured</div>
                                 <div class="muted" style="font-size:13px">Curated content with higher visibility</div>
                             </div>
-                            <span class="badge" style="background:rgba(100,255,150,0.12); color:rgba(100,255,150,0.95);">Curated</span>
+                            <span class="badge"
+                                style="background:rgba(100,255,150,0.12); color:rgba(100,255,150,0.95);">Curated</span>
                         </div>
 
                         <p>Featured apps are hand-picked by moderators and get prominent placement across the
@@ -885,8 +910,10 @@
                         </ul>
 
                         <div style="margin-top:auto; display:flex; gap:8px;">
-                            <a class="nav-link" href="#" style="color:rgba(100,150,255,0.95); text-decoration:none;">Submit for featured</a>
-                            <a class="nav-link" href="#" style="color:#9aa; text-decoration:none;">Featured requirements</a>
+                            <a class="nav-link" href="#"
+                                style="color:rgba(100,150,255,0.95); text-decoration:none;">Submit for featured</a>
+                            <a class="nav-link" href="#" style="color:#9aa; text-decoration:none;">Featured
+                                requirements</a>
                         </div>
                     </div>
                 </div>
@@ -935,12 +962,16 @@
 
                 <section class="section">
                     <h2>What is App Creator?</h2>
-                    <p>App Creator is a powerful web-based tool that allows you to create, edit, and publish custom web applications directly in your browser. It features a Monaco code editor (the same editor used in VS Code) and provides an intuitive interface for managing your apps.</p>
+                    <p>App Creator is a powerful web-based tool that allows you to create, edit, and publish custom web
+                        applications directly in your browser. It features a Monaco code editor (the same editor used in
+                        VS Code) and provides an intuitive interface for managing your apps.</p>
 
                     <h3>Key Features</h3>
                     <ul>
-                        <li><strong>Monaco Editor:</strong> Professional code editing with syntax highlighting, auto-completion, and error detection</li>
-                        <li><strong>Asset Management:</strong> Upload and manage images and other assets for your apps</li>
+                        <li><strong>Monaco Editor:</strong> Professional code editing with syntax highlighting,
+                            auto-completion, and error detection</li>
+                        <li><strong>Asset Management:</strong> Upload and manage images and other assets for your apps
+                        </li>
                         <li><strong>Live Preview:</strong> See your app changes in real-time</li>
                         <li><strong>Import/Export:</strong> Save your apps as XML files for backup or sharing</li>
                         <li><strong>Community Publishing:</strong> Share your apps with the community</li>
@@ -975,7 +1006,8 @@
                         <li><strong>Name:</strong> The display name of your app</li>
                         <li><strong>Description:</strong> A brief description of what your app does</li>
                         <li><strong>Icon:</strong> Upload or paste an icon for your app</li>
-                        <li><strong>Options:</strong> Light mode compatibility, open source status, and style templates</li>
+                        <li><strong>Options:</strong> Light mode compatibility, open source status, and style templates
+                        </li>
                     </ul>
                 </section>
             </div>
@@ -1032,7 +1064,8 @@
 
                 <section class="section">
                     <h2>Asset Management</h2>
-                    <p>Assets are images and files used in your apps. The Assets tab shows all assets for your current app.</p>
+                    <p>Assets are images and files used in your apps. The Assets tab shows all assets for your current
+                        app.</p>
 
                     <h3>Adding Assets</h3>
                     <p>You can add assets in several ways:</p>
